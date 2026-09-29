@@ -30,7 +30,7 @@ export function buildIndex(): IndexedEntry[] {
     { id: 'outlook', name: t('desktop.outlook'), folder: desktop, type: t('find.typeApp'), content: `${t('oe.welcomeBody')} e-mail mail contact kontakt`, icon: 'mail', open: () => openApp('outlook') },
     { id: 'bio', name: 'bio.htm', folder: 'C:\\My Documents', type: t('find.typePage'), content: `${config.ownerName} ${bioText}`, icon: 'html', open: () => openApp('ie') },
     { id: 'github', name: 'GitHub.url', folder: 'C:\\WINDOWS\\Favorites', type: t('find.typeShortcut'), content: `${config.githubUrl} code source`, icon: 'github', open: () => window.open(config.githubUrl, '_blank', 'noopener,noreferrer') },
-    { id: 'help', name: 'kompas95.hlp', folder: 'C:\\WINDOWS\\HELP', type: t('help.topics'), content: (['help.b1', 'help.b2', 'help.b3', 'help.b4', 'help.b5'] as const).map((k) => t(k)).join(' '), icon: 'help', open: () => openApp('help') },
+    { id: 'help', name: 'lukas95.hlp', folder: 'C:\\WINDOWS\\HELP', type: t('help.topics'), content: (['help.b1', 'help.b2', 'help.b3', 'help.b4', 'help.b5'] as const).map((k) => t(k)).join(' '), icon: 'help', open: () => openApp('help') },
     { id: 'dos', name: 'COMMAND.COM', folder: 'C:\\WINDOWS', type: t('find.typeApp'), content: 'MS-DOS prompt', icon: 'dos', open: () => openApp('dos') },
     ...projects.map((p) => ({
       id: `project:${p.id}`,

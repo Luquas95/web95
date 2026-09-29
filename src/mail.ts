@@ -30,7 +30,7 @@ export async function sendMail(mail: OutgoingMail, fetchImpl: typeof fetch = fet
       body: JSON.stringify({
         access_key: config.web3formsKey,
         subject: mail.subject,
-        from_name: `${config.brand.bold} ${config.brand.light}`,
+        from_name: `${config.brand.bold}${config.brand.light}`,
         name: mail.name || mail.email,
         email: mail.email,
         message: mail.message,

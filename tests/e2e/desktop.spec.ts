@@ -33,7 +33,7 @@ test('windows minimize, restore, maximize and close', async ({ page }) => {
   test.skip(isMobile(page), 'windows start maximized on phones');
   await openIcon(page, 'ie');
   const win = page.locator('.window[data-key="ie"]');
-  await expect(win.locator('.title-text')).toHaveText('Luquas95 - Internet Explorer');
+  await expect(win.locator('.title-text')).toHaveText('Lukas95 - Internet Explorer');
   await win.locator('.title-min').click();
   await expect(win).toBeHidden();
   await page.locator('.task-button[data-key="ie"]').click();
@@ -66,7 +66,7 @@ test('windows can be dragged by the title bar', async ({ page }) => {
 test('Internet Explorer shows the bio and can navigate', async ({ page }) => {
   await openIcon(page, 'ie');
   const win = page.locator('.window[data-key="ie"]');
-  await expect(win.locator('.bio-page h1')).toHaveText('Luquas95');
+  await expect(win.locator('.bio-page h1')).toHaveText('Lukas95');
   await expect(win.locator('.ie-status-text')).toHaveText('Done');
   await win.locator('.ie-address').fill('nowhere');
   await win.locator('.ie-address').press('Enter');

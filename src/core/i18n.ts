@@ -24,7 +24,7 @@ let current: Lang = 'en';
 
 /** Placeholders every string may use. */
 const BUILTIN_VARS = {
-  brand: `${config.brand.bold} ${config.brand.light}`,
+  brand: `${config.brand.bold}${config.brand.light}`,
   owner: config.ownerName,
 };
 

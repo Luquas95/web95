@@ -1,6 +1,6 @@
 /** localStorage/sessionStorage wrappers that never throw (private mode, blocked storage). */
 
-const PREFIX = 'kompas95.';
+const PREFIX = 'lukas95.';
 
 function area(kind: 'local' | 'session'): Storage | null {
   try {

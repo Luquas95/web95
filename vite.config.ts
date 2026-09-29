@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   // Relative base so the build works both at the domain root and under
-  // a GitHub Pages project path such as /Kompas/.
+  // a GitHub Pages project path such as /<repository>/.
   base: './',
   build: {
     target: 'es2020',

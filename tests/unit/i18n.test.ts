@@ -26,7 +26,7 @@ describe('t()', () => {
 
   it('substitutes variables and built-ins', () => {
     expect(t('mycomp.objects', { n: 3 })).toBe('3 object(s)');
-    expect(t('about.title')).toBe('About Kompas 95');
+    expect(t('about.title')).toBe('About Lukas95');
   });
 
   it('switches language and notifies listeners', () => {

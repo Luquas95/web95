@@ -6,7 +6,7 @@ import type { Win } from '../core/window-manager';
 import { bio } from '../data/bio';
 import { projects } from '../data/projects';
 
-const BRAND = `${config.brand.bold} ${config.brand.light}`;
+const BRAND = `${config.brand.bold}${config.brand.light}`;
 
 /** A tiny COMMAND.COM. `onExit` runs for EXIT (and WIN in full-screen mode). */
 export function createTerminal(onExit: () => void, fullscreen: boolean): HTMLElement {

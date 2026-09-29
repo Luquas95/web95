@@ -1,4 +1,4 @@
-# Kompas 95
+# Lukas95
 
 Vývojářské portfolio, které vypadá a chová se jako počítač s Windows 95.
 Návštěvník uvidí plochu, otevírá okna, píše přes Outlook Express, čte bio
@@ -62,7 +62,7 @@ Užitečné parametry URL: `?boot=0` (bez úvodní obrazovky), `?welcome=0`
 
 | Co | Kde |
 | --- | --- |
-| Jméno, odkaz na GitHub, přesměrování po vypnutí | `src/config.ts` |
+| Jméno, název systému, odkaz na GitHub, přesměrování po vypnutí | `src/config.ts` |
 | Text bia (zatím zástupný) | `src/data/bio.ts` |
 | Projekty ve složce Tento počítač | `src/data/projects.ts` |
 | Texty rozhraní (EN/CS) | `src/core/strings.ts` |
@@ -89,5 +89,5 @@ nastaven.
 2. Pushnout do větve `main`. Workflow `.github/workflows/deploy.yml` web
    sestaví a nasadí.
 
-Sestavení používá relativní cesty, takže funguje na `https://<uživatel>.github.io/Kompas/`
+Sestavení používá relativní cesty, takže funguje na `https://<uživatel>.github.io/<repozitář>/`
 i na vlastní doméně.
