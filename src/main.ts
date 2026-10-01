@@ -11,7 +11,7 @@ import { registerShutdown } from './apps/shutdown';
 import { registerWelcome, welcomeEnabled } from './apps/welcome';
 import { bootEnabled, runBoot } from './core/boot';
 import { initDesktop } from './core/desktop';
-import { h } from './core/dom';
+import { h, keyLetter } from './core/dom';
 import { initLang } from './core/i18n';
 import { isMenuOpen, closeMenus } from './core/menu';
 import { toggleStartMenu } from './core/start-menu';
@@ -44,9 +44,12 @@ async function main(): Promise<void> {
   app.append(taskbar);
   countVisit();
 
-  // Ctrl+Esc opens the Start menu, as on a real PC.
+  // Ctrl+Esc opens the Start menu, as on a real PC. Windows keeps Ctrl+Esc for its
+  // own Start menu, so Alt+S does the same – unless a window already used the key
+  // (Alt+S sends a new message, or opens a menu such as Czech "Soubor").
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && e.ctrlKey) {
+    const altS = e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey && keyLetter(e) === 's';
+    if ((e.key === 'Escape' && e.ctrlKey) || (altS && !e.defaultPrevented)) {
       e.preventDefault();
       const start = taskbar.querySelector<HTMLElement>('.start-button')!;
       if (isMenuOpen()) closeMenus();

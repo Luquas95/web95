@@ -234,7 +234,7 @@ export const en = {
     'My Computer holds demos of my projects. Internet Explorer shows who I am. Outlook Express lets you send me a message. Use Start > Find to search the whole site.',
   'help.t4': 'Keyboard shortcuts',
   'help.b4':
-    'Ctrl+Esc opens the Start menu. Arrow keys move between desktop icons, Enter opens them. Esc closes menus and dialogs. Tab moves between controls.',
+    'Ctrl+Esc (or Alt+S) opens the Start menu. F10 or Alt with an underlined letter opens a window\'s menus. Arrow keys move between desktop icons, Enter opens them. Esc closes menus and dialogs. Tab moves between controls.',
   'help.t5': 'Changing the language',
   'help.b5': 'Click the language indicator next to the clock, or use Start > Settings > Language.',
 
@@ -248,7 +248,7 @@ export const en = {
   'welcome.tip3': 'You can write to me using Outlook Express.',
   'welcome.tip4': 'My Computer is where demos of my projects live.',
   'welcome.tip5': 'Start > Find searches everything on this computer.',
-  'welcome.tip6': 'Press Ctrl+Esc to open the Start menu from the keyboard.',
+  'welcome.tip6': 'Press Ctrl+Esc (or Alt+S) to open the Start menu from the keyboard.',
   'welcome.tip7': 'Prefer Czech? Click the language indicator next to the clock.',
   'welcome.bio': '&About me',
   'welcome.contact': '&Contact me',
@@ -497,7 +497,7 @@ export const cs: Record<StringKey, string> = {
     'Ve složce Tento počítač najdete ukázky mých projektů. Internet Explorer vám řekne, kdo jsem. Přes Outlook Express mi můžete napsat. Příkazem Start > Najít prohledáte celý web.',
   'help.t4': 'Klávesové zkratky',
   'help.b4':
-    'Ctrl+Esc otevře nabídku Start. Šipkami se pohybujete mezi ikonami na ploše, klávesou Enter je otevřete. Esc zavírá nabídky a dialogy. Tabulátor přechází mezi ovládacími prvky.',
+    'Ctrl+Esc (nebo Alt+S) otevře nabídku Start. F10 nebo Alt s podtrženým písmenem otevře nabídky okna. Šipkami se pohybujete mezi ikonami na ploše, klávesou Enter je otevřete. Esc zavírá nabídky a dialogy. Tabulátor přechází mezi ovládacími prvky.',
   'help.t5': 'Změna jazyka',
   'help.b5': 'Klepněte na indikátor jazyka vedle hodin nebo použijte Start > Nastavení > Jazyk.',
 
@@ -510,7 +510,7 @@ export const cs: Record<StringKey, string> = {
   'welcome.tip3': 'Napsat mi můžete přes Outlook Express.',
   'welcome.tip4': 'Ve složce Tento počítač bydlí ukázky mých projektů.',
   'welcome.tip5': 'Start > Najít prohledá celý tento počítač.',
-  'welcome.tip6': 'Klávesami Ctrl+Esc otevřete nabídku Start z klávesnice.',
+  'welcome.tip6': 'Klávesami Ctrl+Esc (nebo Alt+S) otevřete nabídku Start z klávesnice.',
   'welcome.tip7': 'Radši anglicky? Klepněte na indikátor jazyka vedle hodin.',
   'welcome.bio': '&O mně',
   'welcome.contact': '&Napište mi',

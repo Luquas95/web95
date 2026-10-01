@@ -39,8 +39,11 @@ i na telefonu.
   (`help`, `dir`, `type bio.txt`, `start ie`, …).
 - **Dvojjazyčnost:** angličtina a čeština. Jazyk se vybírá automaticky podle
   prohlížeče a přepíná v liště nebo v nabídce Start > Nastavení > Jazyk.
-- **Přístupnost:** ovládání klávesnicí (Ctrl+Esc, šipky, Enter, Esc,
-  podtržené přístupové klávesy) a respektování `prefers-reduced-motion`.
+- **Přístupnost:** ovládání klávesnicí a respektování `prefers-reduced-motion`.
+  Nabídku Start otevře Ctrl+Esc nebo Alt+S (na Windows si Ctrl+Esc bere systém,
+  proto ta druhá zkratka). Nabídky oken se otevírají klávesou F10 nebo Alt
+  s podtrženým písmenem. Šipky a Enter ovládají ikony a Esc zavírá nabídky
+  a dialogy.
 
 Ikony jsou vlastní pixel-art v SVG, žádná grafika Microsoftu se nepoužívá.
 

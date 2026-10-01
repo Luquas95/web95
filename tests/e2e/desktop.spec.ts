@@ -216,3 +216,12 @@ test('Alt+S in a new message sends it instead of opening a menu', async ({ page 
   await expect(page.locator('.menu')).toHaveCount(0);
   await expect(page.locator('.start-button')).not.toHaveClass(/pressed/);
 });
+
+test('Alt+S opens the Start menu from the desktop', async ({ page }) => {
+  test.skip(isMobile(page), 'keyboard only');
+  await page.locator('.desktop-icon[data-id="ie"]').click();
+  await page.keyboard.press('Alt+s');
+  await expect(page.locator('.menu-start')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.menu-start')).toHaveCount(0);
+});
