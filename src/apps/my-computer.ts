@@ -119,7 +119,8 @@ function openMyComputer(): void {
     let next = -1;
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = Math.min(items.length - 1, current + 1);
     if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = Math.max(0, current - 1);
-    if (e.key === 'Enter' && current >= 0) openProject(projects[current]);
+    // Items handle their own Enter; this covers the folder itself having focus.
+    if (e.key === 'Enter' && e.target === area && current >= 0) openProject(projects[current]);
     if (next >= 0) {
       e.preventDefault();
       select(projects[next]);
