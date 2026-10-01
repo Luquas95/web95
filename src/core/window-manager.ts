@@ -350,7 +350,17 @@ export class Win {
     e.preventDefault();
     const start = { x: e.clientX, y: e.clientY };
     const origin = { ...this.bounds };
-    this.dragOutline(e, (dx, dy) => ({ ...origin, x: origin.x + dx, y: origin.y + dy }), start);
+    const { w: dw, h: dh } = this.wm.desktopSize();
+    this.dragOutline(
+      e,
+      (dx, dy) => ({
+        ...origin,
+        // Keep part of the title bar reachable.
+        x: clamp(origin.x + dx, -origin.w + 40, dw - 40),
+        y: clamp(origin.y + dy, 0, dh - TITLE_H),
+      }),
+      start,
+    );
   }
 
   private startResize(e: PointerEvent, edge: Edge): void {
@@ -367,13 +377,16 @@ export class Win {
         const b = { ...origin };
         if (edge.includes('e')) b.w = Math.max(minW, origin.w + dx);
         if (edge.includes('s')) b.h = Math.max(minH, origin.h + dy);
+        // The opposite edge stays anchored, also when the pointer leaves the desktop.
         if (edge.includes('w')) {
-          b.w = Math.max(minW, origin.w - dx);
-          b.x = origin.x + origin.w - b.w;
+          const right = origin.x + origin.w;
+          b.x = clamp(origin.x + dx, Math.min(0, origin.x), right - minW);
+          b.w = right - b.x;
         }
         if (edge.includes('n')) {
-          b.h = Math.max(minH, origin.h - dy);
-          b.y = origin.y + origin.h - b.h;
+          const bottom = origin.y + origin.h;
+          b.y = clamp(origin.y + dy, 0, bottom - minH);
+          b.h = bottom - b.y;
         }
         return b;
       },
@@ -386,15 +399,12 @@ export class Win {
     target.setPointerCapture?.(e.pointerId);
     let outline: HTMLElement | null = null;
     let next: Bounds | null = null;
-    const { w: dw, h: dh } = this.wm.desktopSize();
 
     const move = (ev: PointerEvent) => {
       const dx = ev.clientX - start.x;
       const dy = ev.clientY - start.y;
       if (!outline && Math.abs(dx) + Math.abs(dy) < 3) return;
       next = compute(dx, dy);
-      next.y = clamp(next.y, 0, dh - TITLE_H);
-      next.x = clamp(next.x, -next.w + 40, dw - 40);
       if (!outline) {
         outline = this.wm.createOutline();
       }

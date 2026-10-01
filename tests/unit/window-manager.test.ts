@@ -79,3 +79,41 @@ describe('WindowManager', () => {
     void b;
   });
 });
+
+describe('resizing', () => {
+  const drag = (handle: Element, from: { x: number; y: number }, to: { x: number; y: number }) => {
+    handle.dispatchEvent(new MouseEvent('pointerdown', { button: 0, clientX: from.x, clientY: from.y, bubbles: true }));
+    handle.dispatchEvent(new MouseEvent('pointermove', { clientX: to.x, clientY: to.y, bubbles: true }));
+    handle.dispatchEvent(new MouseEvent('pointerup', { clientX: to.x, clientY: to.y, bubbles: true }));
+  };
+
+  it('keeps the bottom edge in place when the top edge is dragged past the desktop', () => {
+    const win = open('a', { x: 100, y: 50, width: 300, height: 200 });
+    const bottom = win.bounds.y + win.bounds.h;
+    drag(win.el.querySelector('.resize-n')!, { x: 200, y: 50 }, { x: 200, y: -300 });
+    expect(win.bounds.y).toBe(0);
+    expect(win.bounds.y + win.bounds.h).toBe(bottom);
+  });
+
+  it('keeps the right edge in place when the left edge is dragged past the desktop', () => {
+    const win = open('a', { x: 100, y: 50, width: 300, height: 200 });
+    const right = win.bounds.x + win.bounds.w;
+    drag(win.el.querySelector('.resize-w')!, { x: 100, y: 100 }, { x: -500, y: 100 });
+    expect(win.bounds.x).toBe(0);
+    expect(win.bounds.x + win.bounds.w).toBe(right);
+  });
+
+  it('respects the minimum size', () => {
+    const win = open('a', { x: 100, y: 50, width: 300, height: 200, minHeight: 100 });
+    drag(win.el.querySelector('.resize-n')!, { x: 200, y: 50 }, { x: 200, y: 400 });
+    expect(win.bounds.h).toBe(100);
+    expect(win.bounds.y + win.bounds.h).toBe(250);
+  });
+
+  it('still clamps windows that are moved off the desktop', () => {
+    const win = open('a', { x: 100, y: 50, width: 300, height: 200 });
+    drag(win.titlebar, { x: 150, y: 55 }, { x: 150, y: -400 });
+    expect(win.bounds.y).toBe(0);
+    expect(win.bounds.h).toBe(200);
+  });
+});
