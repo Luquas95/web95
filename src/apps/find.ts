@@ -52,6 +52,8 @@ function openFind(): void {
   }
 
   let searching = false;
+  /** Incremented to cancel the running search; a search only touches the UI while its id is current. */
+  let runId = 0;
   let lastNamed = '';
   let tab: 'name' | 'date' | 'advanced' = 'name';
 
@@ -98,7 +100,15 @@ function openFind(): void {
   }
 
   const findNow = button('find.findNow', () => void run(), { isDefault: true, id: 'find-now' });
-  const stop = button('find.stop', () => (searching = false), { disabled: true, id: 'find-stop' });
+  const stop = button(
+    'find.stop',
+    () => {
+      if (!searching) return;
+      runId++;
+      finish();
+    },
+    { disabled: true, id: 'find-stop' },
+  );
   const newSearch = button('find.newSearch', () => reset(), { id: 'find-new' });
   const anim = h('div', { class: 'find-anim', 'aria-hidden': 'true' }, icon('folder', 32), h('span', { class: 'find-anim-glass' }, icon('find', 32)));
 
@@ -133,6 +143,7 @@ function openFind(): void {
   async function run() {
     if (searching) return;
     searching = true;
+    const id = ++runId;
     lastNamed = named.value.trim();
     findNow.disabled = true;
     stop.disabled = false;
@@ -147,9 +158,15 @@ function openFind(): void {
     // Reveal results one by one, like a disk being scanned.
     for (const entry of found) {
       await wait(90);
-      if (!searching) break;
+      // Stopped, reset or superseded: whoever cancelled us now owns the UI.
+      if (id !== runId) return;
       addRow(entry as IndexedEntry);
     }
+    finish();
+  }
+
+  /** Return the buttons to their idle state and report what was found. */
+  function finish() {
     searching = false;
     findNow.disabled = false;
     stop.disabled = true;
@@ -177,7 +194,11 @@ function openFind(): void {
   }
 
   function reset() {
+    runId++;
     searching = false;
+    findNow.disabled = false;
+    stop.disabled = true;
+    anim.classList.remove('active');
     named.value = '';
     containing.value = '';
     lastNamed = '';
@@ -232,6 +253,7 @@ function openFind(): void {
     body: form,
     statusbar: status,
     onClosed: () => {
+      runId++;
       searching = false;
     },
   });
