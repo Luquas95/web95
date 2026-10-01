@@ -184,3 +184,35 @@ test('reopening Outlook Express does not duplicate its handlers', async ({ page 
   await oe.locator('[data-folder="deleted"]').click();
   await expect(oe.locator('.oe-list tbody tr[data-message]')).toHaveCount(1);
 });
+
+test('menu bars open with F10 and Alt+letter', async ({ page }) => {
+  test.skip(isMobile(page), 'keyboard only');
+  await openIcon(page, 'ie');
+  const ie = page.locator('.window[data-key="ie"]');
+  await expect(ie.locator('.bio-page')).toBeVisible();
+  await ie.locator('.ie-content').click();
+  await page.keyboard.press('F10');
+  await expect(page.locator('.menu')).toBeVisible();
+  await expect(ie.locator('.menubar-item.open')).toHaveText('File');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.menu')).toHaveCount(0);
+  await page.keyboard.press('Alt+v');
+  await expect(ie.locator('.menubar-item.open')).toHaveText('View');
+  await page.keyboard.press('Escape');
+  await page.keyboard.press('Alt+f');
+  await expect(ie.locator('.menubar-item.open')).toHaveText('File');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.menu')).toHaveCount(0);
+});
+
+test('Alt+S in a new message sends it instead of opening a menu', async ({ page }) => {
+  test.skip(isMobile(page), 'keyboard only');
+  await page.goto('/?boot=0&welcome=0&lang=cs');
+  await openIcon(page, 'outlook');
+  await page.locator('[data-id="oe-compose"]').click();
+  await expect(page.locator('.compose-window .oe-from')).toBeFocused();
+  await page.keyboard.press('Alt+s');
+  await expect(page.locator('.msgbox-text')).toContainText('platnou e-mailovou adresu');
+  await expect(page.locator('.menu')).toHaveCount(0);
+  await expect(page.locator('.start-button')).not.toHaveClass(/pressed/);
+});

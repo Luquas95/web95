@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { accelKey, accelLabel, h, plainLabel } from '../../src/core/dom';
+import { accelKey, accelLabel, h, keyLetter, plainLabel } from '../../src/core/dom';
 import { formatClock } from '../../src/core/taskbar';
 import { isValidEmail } from '../../src/mail';
 
@@ -46,5 +46,14 @@ describe('isValidEmail', () => {
     expect(isValidEmail(' me@example.cz ')).toBe(true);
     expect(isValidEmail('me@example')).toBe(false);
     expect(isValidEmail('not an email')).toBe(false);
+  });
+});
+
+describe('keyLetter', () => {
+  it('uses the typed letter, falling back to the physical key for composed characters', () => {
+    expect(keyLetter(new KeyboardEvent('keydown', { key: 'F', code: 'KeyF', altKey: true }))).toBe('f');
+    expect(keyLetter(new KeyboardEvent('keydown', { key: 'z', code: 'KeyY', altKey: true }))).toBe('z');
+    expect(keyLetter(new KeyboardEvent('keydown', { key: 'ß', code: 'KeyS', altKey: true }))).toBe('s');
+    expect(keyLetter(new KeyboardEvent('keydown', { key: 'F10', code: 'F10' }))).toBe('');
   });
 });

@@ -45,6 +45,8 @@ const value = <T>(v: T | (() => T) | undefined): T | undefined =>
   typeof v === 'function' ? (v as () => T)() : v;
 
 let root: Menu | null = null;
+/** Where keyboard focus goes back to once the menus close. */
+let returnFocus: HTMLElement | null = null;
 
 function layer(): HTMLElement {
   let el = document.getElementById('menu-layer');
@@ -307,6 +309,8 @@ function onBlur(): void {
 /** Open a menu tree, closing any other open menu first. */
 export function openMenu(items: MenuItem[], anchor: Anchor, opts: MenuOptions = {}): void {
   closeMenus();
+  const active = document.activeElement;
+  returnFocus = active instanceof HTMLElement && active !== document.body ? active : null;
   root = new Menu(items, anchor, opts);
   document.addEventListener('pointerdown', onPointerDown, true);
   document.addEventListener('keydown', onKeyDown, true);
@@ -325,11 +329,27 @@ export function closeMenus(): void {
   document.removeEventListener('keydown', onKeyDown, true);
   window.removeEventListener('blur', onBlur);
   window.removeEventListener('resize', onBlur);
+  const active = document.activeElement;
+  if ((!active || active === document.body) && returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
+  returnFocus = null;
   closing.opts.onClose?.();
 }
 
 export function isMenuOpen(): boolean {
   return root !== null;
+}
+
+/** Keyboard access to a window's menu bar (F10, Alt+letter). */
+export interface MenubarApi {
+  /** Open the menu whose access key is `key`; returns whether one was opened. */
+  openByKey(key: string): boolean;
+  openFirst(): void;
+}
+
+const menubars = new WeakMap<HTMLElement, MenubarApi>();
+
+export function menubarApi(bar: HTMLElement): MenubarApi | undefined {
+  return menubars.get(bar);
 }
 
 export interface MenubarMenu {
@@ -377,6 +397,16 @@ export function createMenubar(menus: MenubarMenu[]): HTMLElement {
     btn.classList.add('open');
     openIndex = index;
   }
+
+  menubars.set(bar, {
+    openByKey: (key) => {
+      const index = menus.findIndex((menu) => accelKey(menu.label()) === key);
+      if (index < 0) return false;
+      open(index, true);
+      return true;
+    },
+    openFirst: () => open(0, true),
+  });
 
   whileConnected(bar, () => {
     buttons.forEach((btn, i) => btn.replaceChildren(accelLabel(menus[i].label())));

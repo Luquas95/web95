@@ -84,6 +84,16 @@ export function plainLabel(label: string): string {
   return label.replace(/&(.)/g, '$1');
 }
 
+/**
+ * The letter of a key press, independent of modifiers. With Alt held, macOS
+ * reports composed characters in `key` (Alt+S → "ß"); then the physical key is used.
+ */
+export function keyLetter(e: KeyboardEvent): string {
+  if (/^[a-z]$/i.test(e.key)) return e.key.toLowerCase();
+  if (/^Key[A-Z]$/.test(e.code)) return e.code.slice(3).toLowerCase();
+  return e.key.length === 1 ? e.key.toLowerCase() : '';
+}
+
 export function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), Math.max(min, max));
 }

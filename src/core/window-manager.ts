@@ -1,8 +1,8 @@
 import { zoomCaption, toBox, type Box } from './animate';
-import { clamp, h, prefersReducedMotion, uniqueId } from './dom';
+import { clamp, h, keyLetter, prefersReducedMotion, uniqueId } from './dom';
 import { t, whileConnected } from './i18n';
 import { icon, type IconName } from './icons';
-import { openMenu, type MenuItem } from './menu';
+import { menubarApi, openMenu, type MenuItem } from './menu';
 
 export type WinState = 'normal' | 'minimized' | 'maximized';
 type Bounds = { x: number; y: number; w: number; h: number };
@@ -450,6 +450,9 @@ export class WindowManager {
   taskbarRectFor: ((win: Win) => DOMRect | null) | null = null;
 
   constructor(readonly container: HTMLElement) {
+    // Menu bar keys are handled here, after the window's own handlers have had
+    // their chance (a handled event arrives with defaultPrevented set).
+    container.addEventListener('keydown', (e) => this.menubarKeys(e));
     window.addEventListener('resize', () => {
       for (const win of this.windows) {
         if (win.state !== 'maximized') {
@@ -458,6 +461,22 @@ export class WindowManager {
         } else win.opts.onResize?.();
       }
     });
+  }
+
+  /** F10 opens the first menu of the focused window, Alt+letter the matching one. */
+  private menubarKeys(e: KeyboardEvent): void {
+    if (e.defaultPrevented || e.ctrlKey || e.metaKey) return;
+    const win = this.windows.find((w) => w.el.contains(e.target as Node));
+    if (!win || win.modalChild || !win.opts.menubar) return;
+    const api = menubarApi(win.opts.menubar);
+    if (!api) return;
+    if (e.key === 'F10' && !e.altKey && !e.shiftKey) {
+      e.preventDefault();
+      api.openFirst();
+    } else if (e.altKey && !e.shiftKey && api.openByKey(keyLetter(e))) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
   }
 
   onChange(fn: () => void): () => void {

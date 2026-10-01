@@ -1,6 +1,6 @@
 import { config } from '../config';
 import { fieldLabel, liveText, statusbar, toolButton, toolSeparator, toolbar } from '../core/controls';
-import { h, uniqueId, wait } from '../core/dom';
+import { h, keyLetter, uniqueId, wait } from '../core/dom';
 import { getLang, t, whileConnected, type StringKey } from '../core/i18n';
 import { icon, type IconName } from '../core/icons';
 import { createMenubar } from '../core/menu';
@@ -518,7 +518,7 @@ function openCompose(initial?: Draft, fromDraft?: Message): void {
   });
   subject.addEventListener('input', () => win.refreshTitle());
   win.el.addEventListener('keydown', (e) => {
-    if ((e.altKey && e.key.toLowerCase() === 's') || (e.ctrlKey && e.key === 'Enter')) {
+    if ((e.altKey && keyLetter(e) === 's') || (e.ctrlKey && e.key === 'Enter')) {
       e.preventDefault();
       void send();
     }
