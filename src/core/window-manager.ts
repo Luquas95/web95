@@ -1,5 +1,5 @@
 import { zoomCaption, toBox, type Box } from './animate';
-import { clamp, h, keyLetter, prefersReducedMotion, uniqueId } from './dom';
+import { clamp, h, isAltShortcut, keyLetter, prefersReducedMotion, uniqueId } from './dom';
 import { t, whileConnected } from './i18n';
 import { icon, type IconName } from './icons';
 import { menubarApi, openMenu, type MenuItem } from './menu';
@@ -473,7 +473,7 @@ export class WindowManager {
     if (e.key === 'F10' && !e.altKey && !e.shiftKey) {
       e.preventDefault();
       api.openFirst();
-    } else if (e.altKey && !e.shiftKey && api.openByKey(keyLetter(e))) {
+    } else if (isAltShortcut(e) && !e.shiftKey && api.openByKey(keyLetter(e))) {
       e.preventDefault();
       e.stopPropagation();
     }

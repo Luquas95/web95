@@ -94,6 +94,34 @@ export function keyLetter(e: KeyboardEvent): string {
   return e.key.length === 1 ? e.key.toLowerCase() : '';
 }
 
+/** True on macOS / iOS, where Option+letter types characters instead of being a shortcut. */
+export function isApplePlatform(): boolean {
+  const nav = typeof navigator === 'undefined' ? undefined : navigator;
+  const platform = (nav as (Navigator & { userAgentData?: { platform?: string } }) | undefined)?.userAgentData?.platform ?? nav?.platform ?? '';
+  return /mac|iphone|ipad|ipod/i.test(platform);
+}
+
+/** True when the event target accepts typed text (input, textarea, contenteditable). */
+export function isTextEntry(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) return false;
+  if (target.isContentEditable) return true;
+  if (target instanceof HTMLTextAreaElement) return !target.readOnly;
+  if (target instanceof HTMLInputElement) {
+    const textTypes = ['text', 'search', 'email', 'url', 'tel', 'password', 'number', ''];
+    return !target.readOnly && textTypes.includes(target.type);
+  }
+  return false;
+}
+
+/**
+ * Whether an Alt+letter press should be treated as a shortcut. On Apple
+ * platforms Option+letter inside a text field types a character, so it is not.
+ */
+export function isAltShortcut(e: KeyboardEvent): boolean {
+  if (!e.altKey || e.ctrlKey || e.metaKey) return false;
+  return !(isApplePlatform() && isTextEntry(e.target));
+}
+
 export function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), Math.max(min, max));
 }

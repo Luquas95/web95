@@ -11,7 +11,7 @@ import { registerShutdown } from './apps/shutdown';
 import { registerWelcome, welcomeEnabled } from './apps/welcome';
 import { bootEnabled, runBoot } from './core/boot';
 import { initDesktop } from './core/desktop';
-import { h, keyLetter } from './core/dom';
+import { h, isAltShortcut, keyLetter } from './core/dom';
 import { initLang } from './core/i18n';
 import { isMenuOpen, closeMenus } from './core/menu';
 import { toggleStartMenu } from './core/start-menu';
@@ -48,7 +48,7 @@ async function main(): Promise<void> {
   // own Start menu, so Alt+S does the same – unless a window already used the key
   // (Alt+S sends a new message, or opens a menu such as Czech "Soubor").
   document.addEventListener('keydown', (e) => {
-    const altS = e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey && keyLetter(e) === 's';
+    const altS = isAltShortcut(e) && !e.shiftKey && keyLetter(e) === 's';
     if ((e.key === 'Escape' && e.ctrlKey) || (altS && !e.defaultPrevented)) {
       e.preventDefault();
       const start = taskbar.querySelector<HTMLElement>('.start-button')!;

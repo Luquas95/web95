@@ -1,6 +1,6 @@
 import { config } from '../config';
 import { fieldLabel, liveText, statusbar, toolButton, toolSeparator, toolbar } from '../core/controls';
-import { h, keyLetter, uniqueId, wait } from '../core/dom';
+import { h, isAltShortcut, isApplePlatform, keyLetter, uniqueId, wait } from '../core/dom';
 import { getLang, t, whileConnected, type StringKey } from '../core/i18n';
 import { icon, type IconName } from '../core/icons';
 import { createMenubar } from '../core/menu';
@@ -518,7 +518,11 @@ function openCompose(initial?: Draft, fromDraft?: Message): void {
   });
   subject.addEventListener('input', () => win.refreshTitle());
   win.el.addEventListener('keydown', (e) => {
-    if ((e.altKey && keyLetter(e) === 's') || (e.ctrlKey && e.key === 'Enter')) {
+    // Alt+S as in Outlook Express (not on a Mac text field, where Option+S types ß);
+    // Ctrl+Enter everywhere and Cmd+Enter on a Mac.
+    const altS = isAltShortcut(e) && keyLetter(e) === 's';
+    const enter = e.key === 'Enter' && (e.ctrlKey || (e.metaKey && isApplePlatform()));
+    if (altS || enter) {
       e.preventDefault();
       void send();
     }

@@ -250,3 +250,40 @@ test('phones keep the Compose and Send captions and show the welcome message', a
   await expect(page.locator('[data-id="compose-send"] .tool-label')).toBeVisible();
   await expect(page.locator('[data-id="compose-send"] .tool-label')).toHaveText('Send');
 });
+
+test.describe('on a Mac', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      Object.defineProperty(Navigator.prototype, 'platform', { get: () => 'MacIntel' });
+      // Chromium also reports the real OS here; hide it so the spoofed platform wins.
+      Object.defineProperty(Navigator.prototype, 'userAgentData', { get: () => undefined });
+    });
+    await page.goto('/?boot=0&welcome=0&lang=en');
+  });
+
+  test('Option+letter types in text fields and is a shortcut elsewhere', async ({ page }) => {
+    test.skip(isMobile(page), 'keyboard only');
+    await openIcon(page, 'outlook');
+    await page.locator('[data-id="oe-compose"]').click();
+    const body = page.locator('.compose-window .oe-body');
+    await body.click();
+    await body.dispatchEvent('keydown', { key: 'ß', code: 'KeyS', altKey: true, bubbles: true });
+    await body.dispatchEvent('keydown', { key: '´', code: 'KeyE', altKey: true, bubbles: true });
+    await page.waitForTimeout(300);
+    await expect(page.locator('.msgbox-window')).toHaveCount(0);
+    await expect(page.locator('.menu')).toHaveCount(0);
+
+    await body.dispatchEvent('keydown', { key: 'Enter', metaKey: true, bubbles: true });
+    await expect(page.locator('.msgbox-text')).toContainText('valid e-mail address');
+    await page.locator('[data-id="msg-ok"]').click();
+
+    // The message is still empty, so it closes without asking to save it.
+    await page.locator('.compose-window .title-close').click();
+    await expect(page.locator('.compose-window')).toHaveCount(0);
+    await page.locator('.desktop-icon[data-id="ie"]').click();
+    await page.evaluate(() =>
+      document.activeElement!.dispatchEvent(new KeyboardEvent('keydown', { key: 'ß', code: 'KeyS', altKey: true, bubbles: true })),
+    );
+    await expect(page.locator('.menu-start')).toBeVisible();
+  });
+});
