@@ -225,3 +225,16 @@ test('Alt+S opens the Start menu from the desktop', async ({ page }) => {
   await page.keyboard.press('Escape');
   await expect(page.locator('.menu-start')).toHaveCount(0);
 });
+
+test('phones can pinch-zoom and the layout fits the screen', async ({ page }) => {
+  test.skip(!isMobile(page), 'phone layout only');
+  const viewport = await page.locator('meta[name="viewport"]').getAttribute('content');
+  expect(viewport).not.toMatch(/maximum-scale|user-scalable=no/);
+  await openIcon(page, 'ie');
+  await expect(page.locator('.window[data-key="ie"] .bio-page')).toBeVisible();
+  const fits = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth);
+  expect(fits).toBe(true);
+  const taskbar = (await page.locator('#taskbar').boundingBox())!;
+  expect(taskbar.y + taskbar.height).toBeLessThanOrEqual(page.viewportSize()!.height);
+  await expect(page.locator('#taskbar')).toBeInViewport();
+});
