@@ -41,9 +41,12 @@ i na telefonu.
   prohlížeče a přepíná v liště nebo v nabídce Start > Nastavení > Jazyk.
 - **Přístupnost:** ovládání klávesnicí a respektování `prefers-reduced-motion`.
   Nabídku Start otevře Ctrl+Esc nebo Alt+S (na Windows si Ctrl+Esc bere systém,
-  proto ta druhá zkratka). Nabídky oken se otevírají klávesou F10 nebo Alt
-  s podtrženým písmenem. Šipky a Enter ovládají ikony a Esc zavírá nabídky
-  a dialogy.
+  proto ta druhá zkratka). V češtině mají okna nabídku „Soubor“, takže v okně
+  s lištou nabídek otevře Alt+S tuto nabídku, ne Start. Nabídky oken se
+  otevírají klávesou F10 nebo Alt s podtrženým písmenem. Novou zprávu odešle
+  Ctrl+Enter (na Macu ⌘+Enter). Na macOS se v textových polích Option+písmeno
+  nechává pro psaní znaků (ß, é…), zkratky tam neplatí. Šipky a Enter ovládají
+  ikony a Esc zavírá nabídky a dialogy.
 
 Ikony jsou vlastní pixel-art v SVG, žádná grafika Microsoftu se nepoužívá.
 
