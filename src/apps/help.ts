@@ -14,6 +14,11 @@ const TOPICS: { title: StringKey; body: StringKey }[] = [
 ];
 
 function openHelp(): void {
+  const existing = wm().get('help');
+  if (existing) {
+    wm().open(existing.opts); // restores if minimized, otherwise focuses
+    return;
+  }
   let selected = 0;
 
   const list = h('ul', { class: 'help-list sunken-panel scroll', role: 'listbox', tabindex: '0' });

@@ -75,6 +75,11 @@ function formatDate(date: Date): string {
 // ---------------------------------------------------------------------------
 
 function openOutlook(): void {
+  const existing = wm().get('outlook');
+  if (existing) {
+    wm().open(existing.opts); // restores if minimized, otherwise focuses
+    return;
+  }
   let folder: FolderId = 'inbox';
   let current: Message | null = null;
 
@@ -219,6 +224,10 @@ function openOutlook(): void {
       m.read = true;
       mailboxChanged();
     } else renderAll();
+    // The list was re-rendered; keep keyboard focus on the selected row so Delete works.
+    if (win.el.contains(document.activeElement) || document.activeElement === document.body) {
+      listBody.querySelector<HTMLElement>(`[data-message="${m.id}"]`)?.focus({ preventScroll: true });
+    }
   }
 
   function deleteCurrent() {

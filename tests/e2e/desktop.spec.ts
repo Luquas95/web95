@@ -164,3 +164,23 @@ test('windows open maximized on phones', async ({ page }) => {
   await openIcon(page, 'outlook');
   await expect(page.locator('.window[data-key="outlook"]')).toHaveClass(/maximized/);
 });
+
+test('reopening Outlook Express does not duplicate its handlers', async ({ page }) => {
+  test.skip(isMobile(page), 'desktop keyboard flow');
+  await openIcon(page, 'outlook');
+  await page.locator('.start-button').click();
+  await page.locator('[data-id="start-programs"]').click();
+  await page.locator('[data-id="prog-outlook"]').click();
+  await expect(page.locator('.window[data-key="outlook"]')).toHaveCount(1);
+  const oe = page.locator('.window[data-key="outlook"]');
+  await oe.locator('.oe-list tbody tr').first().click();
+  // Chromium reserves Ctrl+N for itself, so deliver the shortcut to the page directly.
+  await oe.locator('.oe-list tbody tr').first().dispatchEvent('keydown', { key: 'n', ctrlKey: true, bubbles: true });
+  await expect(page.locator('.compose-window')).toHaveCount(1);
+  await page.locator('.compose-window .title-close').click();
+  await expect(page.locator('.compose-window')).toHaveCount(0);
+  await oe.locator('.oe-list tbody tr').first().click();
+  await page.keyboard.press('Delete');
+  await oe.locator('[data-folder="deleted"]').click();
+  await expect(oe.locator('.oe-list tbody tr[data-message]')).toHaveCount(1);
+});

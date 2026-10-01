@@ -13,6 +13,11 @@ export function welcomeEnabled(): boolean {
 }
 
 function openWelcome(): void {
+  const existing = wm().get('welcome');
+  if (existing) {
+    wm().open(existing.opts); // restores if minimized, otherwise focuses
+    return;
+  }
   let tip = 0;
   const tipKey = (): StringKey => (TIPS[tip] === 'welcome.tip1' && isCoarsePointer() ? 'welcome.tip1Touch' : TIPS[tip]);
   const tipText = h('p', { class: 'welcome-tip-text' });

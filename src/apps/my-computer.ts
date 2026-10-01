@@ -17,6 +17,11 @@ function projectType(p: Project): string {
 }
 
 function openMyComputer(): void {
+  const existing = wm().get('my-computer');
+  if (existing) {
+    wm().open(existing.opts); // restores if minimized, otherwise focuses
+    return;
+  }
   let view: View = 'large';
   let showStatus = true;
   const selected = new Set<Project>();

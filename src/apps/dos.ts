@@ -139,6 +139,11 @@ export function createTerminal(onExit: () => void, fullscreen: boolean): HTMLEle
 }
 
 function openDos(): void {
+  const existing = wm().get('dos');
+  if (existing) {
+    wm().open(existing.opts); // restores if minimized, otherwise focuses
+    return;
+  }
   let win: Win | undefined;
   const term = createTerminal(() => void win?.close(), false);
   win = wm().open({
