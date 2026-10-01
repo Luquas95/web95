@@ -52,12 +52,13 @@ export function toolButton(
   iconName: ToolIconName,
   label: TextSource,
   onClick: () => void,
-  opts: { disabled?: boolean; id?: string; compact?: boolean } = {},
+  /** `primary` keeps its caption on narrow windows, where other toolbar buttons show only icons. */
+  opts: { disabled?: boolean; id?: string; compact?: boolean; primary?: boolean } = {},
 ): HTMLButtonElement {
   const caption = liveText(h('span', { class: 'tool-label' }), label);
   const btn = h(
     'button',
-    { type: 'button', class: `tool-btn${opts.compact ? ' compact' : ''}`, disabled: opts.disabled, 'data-id': opts.id },
+    { type: 'button', class: `tool-btn${opts.compact ? ' compact' : ''}${opts.primary ? ' primary' : ''}`, disabled: opts.disabled, 'data-id': opts.id },
     toolIcon(iconName),
     caption,
   );

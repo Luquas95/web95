@@ -531,6 +531,12 @@
   .oe-folder-name {
     display: none;
   }
+  /* Size the message list to its rows so the message itself stays in view. */
+  .oe-list {
+    flex: 0 1 auto;
+    min-height: 64px;
+    max-height: 32%;
+  }
   .oe-folder-select {
     display: block;
     flex: 1;
@@ -1158,4 +1164,13 @@
   .marquee span {
     padding-left: 0;
   }
+}
+
+/* The main action of a window keeps its caption even when the toolbar shows only icons. */
+.tool-btn.primary .tool-label {
+  display: block !important;
+}
+
+.tool-btn.primary {
+  min-width: 54px !important;
 }

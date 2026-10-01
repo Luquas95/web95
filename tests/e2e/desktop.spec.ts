@@ -238,3 +238,15 @@ test('phones can pinch-zoom and the layout fits the screen', async ({ page }) =>
   expect(taskbar.y + taskbar.height).toBeLessThanOrEqual(page.viewportSize()!.height);
   await expect(page.locator('#taskbar')).toBeInViewport();
 });
+
+test('phones keep the Compose and Send captions and show the welcome message', async ({ page }) => {
+  test.skip(!isMobile(page), 'phone layout only');
+  await openIcon(page, 'outlook');
+  const compose = page.locator('[data-id="oe-compose"] .tool-label');
+  await expect(compose).toBeVisible();
+  await expect(compose).toHaveText('Compose Message');
+  await expect(page.locator('.oe-inline-compose')).toBeInViewport();
+  await page.locator('[data-id="oe-compose"]').tap();
+  await expect(page.locator('[data-id="compose-send"] .tool-label')).toBeVisible();
+  await expect(page.locator('[data-id="compose-send"] .tool-label')).toHaveText('Send');
+});

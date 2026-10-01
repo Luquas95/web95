@@ -247,7 +247,7 @@ function openOutlook(): void {
     await messageBox({ title: () => t('oe.sendReceiveTitle'), text: () => t('oe.noNew'), icon: 'info', owner: win });
   }
 
-  const composeBtn = toolButton('compose', 'oe.compose', () => openCompose(), { id: 'oe-compose' });
+  const composeBtn = toolButton('compose', 'oe.compose', () => openCompose(), { id: 'oe-compose', primary: true });
   const replyBtn = toolButton('reply', 'oe.reply', () => openCompose({ email: '', name: '', subject: `Re: ${current?.subject() ?? ''}`, body: '' }), { id: 'oe-reply' });
   const replyAllBtn = toolButton('replyAll', 'oe.replyAll', () => undefined, { disabled: true });
   const forwardBtn = toolButton('forwardMail', 'oe.forward', () => undefined, { disabled: true });
@@ -423,7 +423,7 @@ function openCompose(initial?: Draft, fromDraft?: Message): void {
     btn.addEventListener('pointerdown', (e) => e.preventDefault());
     return btn;
   };
-  const sendBtn = toolButton('send', 'compose.send', () => void send(), { id: 'compose-send' });
+  const sendBtn = toolButton('send', 'compose.send', () => void send(), { id: 'compose-send', primary: true });
   const tools = toolbar(
     sendBtn,
     toolSeparator(),
